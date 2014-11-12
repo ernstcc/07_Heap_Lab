@@ -44,6 +44,10 @@ private:
   // If not, swap it down the "tree" of the heap until you find the right
   // place
   void trickleDown(unsigned long index);  
+  
+  unsigned long int leftChild(unsigned long index);
+  unsigned long int rightChild(unsigned long index);
+  unsigned long int parent(unsigned long index);
 };
 #include <string>
 
@@ -88,7 +92,7 @@ template<class Pri, class T>
 void Heap<Pri, T>::bubbleUp(unsigned long index){
 	unsigned long p = parent(index);
 	while (index > 0 && backingArray[index] < backingArray[p]){
-		swap(backingArray[index], backingArray[p])'
+		swap(backingArray[index], backingArray[p]);
 		index = p;
 		p = parent(index);
 	}
@@ -109,4 +113,19 @@ std::pair<Pri, T> Heap<Pri, T>::remove(){
 template<class Pri, class T>
 unsigned long Heap<Pri, T>::getNumItems(){
 	return numItems;
+}
+
+template<class Pri, class T>
+unsigned long Heap<Pri, T>::leftChild(unsigned long index){
+	return (2 * index) + 1;
+}
+
+template<class Pri, class T>
+unsigned long Heap<Pri, T>::rightChild(unsigned long index){
+	return (2 * index) + 2;
+}
+
+template<class Pri, class T>
+unsigned long Heap<Pri, T>::parent(unsigned long index){
+	return (index - 1) / 2;
 }
