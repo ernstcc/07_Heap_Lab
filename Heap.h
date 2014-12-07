@@ -28,7 +28,7 @@ public:
 
 private:
   int arrSize;
-  int numItems;
+  unsigned int numItems;
   std::pair<Pri, T>* backingArray;
 
   //Grow the backingArray by making a new array of twice the size,
@@ -44,10 +44,6 @@ private:
   // If not, swap it down the "tree" of the heap until you find the right
   // place
   void trickleDown(unsigned long index);  
-  
-  unsigned long int leftChild(unsigned long index);
-  unsigned long int rightChild(unsigned long index);
-  unsigned long int parent(unsigned long index);
 };
 #include <string>
 
@@ -60,7 +56,7 @@ Heap<Pri, T>::Heap(){
 
 template<class Pri, class T>
 Heap<Pri, T>::~Heap(){
-	//TODO
+	delete[] backingArray;
 }
 
 template<class Pri, class T>
@@ -84,48 +80,63 @@ void Heap<Pri, T>::add(std::pair<Pri, T> toAdd){
 	}
 
 	backingArray[numItems] = toAdd;
-	numItems++;
 	bubbleUp(numItems);
+	numItems++;
 }
 
 template<class Pri, class T>
 void Heap<Pri, T>::bubbleUp(unsigned long index){
-	unsigned long p = parent(index);
+	unsigned long p = (index - 1) / 2;
 	while (index > 0 && backingArray[index] < backingArray[p]){
 		swap(backingArray[index], backingArray[p]);
 		index = p;
-		p = parent(index);
+		p = (index - 1) / 2;
 	}
 }
 
 template<class Pri, class T>
 void Heap<Pri, T>::trickleDown(unsigned long index){
+	bool madeChange;
+	unsigned long r;
+	unsigned long l;
 	
+	do{
+		madeChange = false;
+		r = (2 * index) + 2;
+		l = (2 * index) + 1;
+
+		if (r < numItems && backingArray[r].first < backingArray[index].first){
+			if (backingArray[l].first < backingArray[r].first){
+				swap(backingArray[index], backingArray[l]);
+				index = l;
+				madeChange = true;
+			}
+			else{
+				swap(backingArray[index], backingArray[r]);
+				index = r;
+				madeChange = true;
+			}
+		}
+		else{
+			if (l < numItems && backingArray[l].first < backingArray[index].first){
+				swap(backingArray[index], backingArray[l]);
+				index = l;
+				madeChange = true;
+			}
+		}
+	} while (madeChange);
 }
 
 template<class Pri, class T>
 std::pair<Pri, T> Heap<Pri, T>::remove(){
-	//TODO
-	std::pair<Pri, T> tmp;
-	return tmp;
+	std::pair<Pri, T> head = backingArray[0];
+	numItems--;
+	backingArray[0] = backingArray[numItems];
+	trickleDown(0);
+	return head;
 }
 
 template<class Pri, class T>
 unsigned long Heap<Pri, T>::getNumItems(){
 	return numItems;
-}
-
-template<class Pri, class T>
-unsigned long Heap<Pri, T>::leftChild(unsigned long index){
-	return (2 * index) + 1;
-}
-
-template<class Pri, class T>
-unsigned long Heap<Pri, T>::rightChild(unsigned long index){
-	return (2 * index) + 2;
-}
-
-template<class Pri, class T>
-unsigned long Heap<Pri, T>::parent(unsigned long index){
-	return (index - 1) / 2;
 }
