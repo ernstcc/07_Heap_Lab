@@ -22,11 +22,9 @@ Questions
 2. The destructor and grow functions both delete unusuable objects.  
 
 #### 2. Exercises 10.1 and 10.2 from http://opendatastructures.org/ods-cpp/10_3_Discussion_Exercises.html
-10.1) 
+10.1) http://imgur.com/c4Ppp3j
  
-10.2) 
- 
-
+10.2) http://imgur.com/KdUjSYt
 
 #### 3. Exercise 10.4 from http://opendatastructures.org/ods-cpp/10_3_Discussion_Exercises.html
 By following Eytzinger's method, the locations of value within a d-ary tree are obtainable by using d, the number of children.  The process to find the parent of a node given an index is:   int parent = (index - 1)/d;
